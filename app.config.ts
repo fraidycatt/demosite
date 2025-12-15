@@ -20,7 +20,7 @@ export default defineAppConfig({
 		},
 
 		button: {
-			// base: 'hover:scale-105 active:hover:scale-95 transition duration-150',
+			base: 'hover:scale-105 active:hover:scale-95 transition duration-150',
 			font: 'font-bold',
 			rounded: 'rounded-button',
 			default: {

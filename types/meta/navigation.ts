@@ -15,6 +15,8 @@ export interface NavigationItem {
 	has_children?: boolean | null;
 	/** Icon that displays in dropdown menus on website. */
 	icon?: string | null;
+	/** Image displayed in navigation dropdown cards */
+	image?: string | null;
 	id?: string;
 	/** Label to help User. Displays below the link in dropdown nav menus. */
 	label?: string | null;

@@ -7,7 +7,7 @@ const { fileUrl } = useFiles();
 // JSON-LD
 useSchemaOrg([
 	defineOrganization({
-		name: globals?.title ?? 'AgencyOS',
+		name: globals?.title ?? 'Demo Site',
 		logo: globals?.logo_on_light_bg ? fileUrl(globals?.logo_on_light_bg) : '/logos/agencyos.png',
 		sameAs: () => {
 			const socialLinks = globals?.social_links ?? [];
