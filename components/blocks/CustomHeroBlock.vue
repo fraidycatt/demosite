@@ -81,9 +81,9 @@ watch(
 </script>
 
 <template>
-  <BlockContainer class="relative overflow-hidden min-h-[420px] flex items-center justify-center">
+  <BlockContainer class="relative overflow-hidden h-screen w-full flex items-center justify-center p-0">
     <canvas ref="canvasRef" class="absolute inset-0 w-full h-full z-0 transition-colors duration-300" />
-    <div class="relative z-10 flex flex-col items-center justify-center text-center py-24 px-6">
+    <div class="relative z-10 flex flex-col items-center justify-center text-center px-6 w-full">
       <h1 v-if="data.title" class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
         {{ data.title }}
       </h1>
