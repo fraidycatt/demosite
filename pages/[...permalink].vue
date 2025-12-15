@@ -161,6 +161,7 @@ const { data: page } = await useAsyncData(
 									block_html: ['*'],
 									block_video: ['*'],
 									block_cardgroup: ['*'],
+									block_custom_hero_block: ['id', 'title', 'subtitle', 'content'],
 								},
 							},
 						],
