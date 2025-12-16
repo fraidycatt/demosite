@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+
+const isFloating = ref(false);
+
+function onScroll() {
+	isFloating.value = window.scrollY > 40;
+}
+
+onMounted(() => {
+	window.addEventListener('scroll', onScroll);
+});
+onBeforeUnmount(() => {
+	window.removeEventListener('scroll', onScroll);
+});
 const { theme, globals } = useAppConfig();
 
 const {
@@ -49,59 +63,76 @@ const {
 );
 </script>
 <template>
-	<header class="glassmorphism-nav fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-4/5 max-w-7xl">
-		<div class="glassmorphism-container flex items-center justify-between h-16 px-6">
-			<!-- Logo -->
-			<NuxtLink href="/" class="flex items-center space-x-3 py-2">
-				<Logo class="h-8 text-white drop-shadow-lg" />
-				<span v-if="globals?.title" class="text-white font-bold text-lg tracking-tight drop-shadow-sm">{{ globals.title }}</span>
-			</NuxtLink>
+	<header :class="[
+		    'glassmorphism-nav fixed z-50 transition-all duration-300 left-1/2 transform -translate-x-1/2',
+			isFloating
+				? 'w-4/5 max-w-7xl rounded-2xl mt-2 pt-0'
+				: 'w-full max-w-none rounded-none mt-0 pt-0 top-0'
+		]">
+		<div class="flex transition-all duration-300">
+			<div :class="['glassmorphism-container flex justify-between ml-6 mr-6 items-center h-16 w-full transition-all duration-300', isFloating ? 'justify-between px-6' : 'justify-center px-0']">
+				<!-- Logo -->
+				<NuxtLink
+					href="/"
+					:class="[
+						'flex items-center space-x-3 py-2 transition-all duration-300',
+						isFloating ? 'logo-anim' : 'logo-anim'
+					]"
+					style="will-change: transform, left;"
+				>
+					<Logo class="h-8 text-white drop-shadow-lg" />
+					
+				</NuxtLink>
 
-			<!-- Navigation -->
-			<nav class="hidden md:flex md:space-x-1 lg:space-x-2" aria-label="Global">
-				<NavigationMenuItem v-for="item in navigation?.items" :key="item.id" :item="item" />
-			</nav>
+				<!-- Navigation -->
+				<nav
+					class="hidden md:flex md:space-x-1 lg:space-x-2 transition-all duration-300"
+					aria-label="Global"
+				>
+					<NavigationMenuItem v-for="item in navigation?.items" :key="item.id" :item="item" />
+				</nav>
 
-			<!-- Actions -->
-			<div class="flex items-center space-x-4">
-				<DarkModeToggle class="hidden text-white/80 md:block hover:text-white transition-colors" bg="dark" />
-				<div class="hidden md:flex items-center space-x-3">
-					<UButton 
-						to="/contact-us" 
-						color="white" 
-						variant="ghost" 
-						size="sm"
-						class="glass-button"
-					>
-						Let's Talk
-					</UButton>
-					<UButton 
-						to="/portal" 
-						color="primary" 
-						size="sm"
-						class="glass-button-primary"
-					>
-						Login
-					</UButton>
+				<!-- Actions -->
+				<div
+					class="flex items-center space-x-4 transition-all duration-300"
+				>
+					<DarkModeToggle class="hidden text-white/80 md:block hover:text-white transition-colors" bg="dark" />
+					<div class="hidden md:flex items-center space-x-3">
+						<UButton 
+							to="/contact-us" 
+							color="white" 
+							variant="ghost" 
+							size="sm"
+							class="glass-button"
+						>
+							Chat With Us
+						</UButton>
+						<UButton 
+							to="/portal" 
+							color="primary" 
+							size="sm"
+							class="glass-button-primary"
+						>
+							Login
+						</UButton>
+					</div>
 				</div>
 			</div>
 		</div>
-		<NavigationMobileMenu v-if="navigation" :navigation="navigation" />
+	<NavigationMobileMenu v-if="navigation" :navigation="navigation" />
 	</header>
 
-	<!-- Spacer to prevent content from hiding behind fixed nav -->
-	<div class="h-24"></div>
 </template>
 
 <style scoped>
+
+/* The base nav style, morphs with classes */
 .glassmorphism-nav {
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
 	background: rgba(0, 0, 0, 0.3);
-	border: 1px solid rgba(255, 255, 255, 0.15);
-	border-radius: 24px;
-	transition: all 0.3s ease;
-	box-shadow: 
+	border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow:
 		0 8px 32px rgba(0, 0, 0, 0.3),
 		0 0 0 1px rgba(255, 255, 255, 0.05),
 		inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -109,8 +140,8 @@ const {
 
 .glassmorphism-nav:hover {
 	background: rgba(0, 0, 0, 0.4);
-	border-color: rgba(255, 255, 255, 0.2);
-	box-shadow: 
+	border-bottom-color: rgba(255, 255, 255, 0.2);
+	box-shadow:
 		0 12px 40px rgba(0, 0, 0, 0.4),
 		0 0 0 1px rgba(255, 255, 255, 0.1),
 		inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -155,7 +186,6 @@ const {
 .glass-button-primary {
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	background: rgba(139, 69, 19, 0.8);
 	border: 1px solid rgba(255, 255, 255, 0.3);
 	transition: all 0.3s ease;
 }

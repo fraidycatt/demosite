@@ -208,7 +208,7 @@ watch(
 	</Popover>
 </template>
 
-<style scoped>
+<style scoped lang="postcss">
 .glass-menu-link {
 	@apply relative text-white/80 hover:text-white transition-all duration-300 font-medium py-3 px-4 inline-flex items-center font-display outline-none rounded-lg;
 	backdrop-filter: blur(10px);

@@ -18,6 +18,7 @@ const componentMap: Record<BlockType, any> = {
 	block_columns: resolveComponent('BlocksColumns'),
 	block_divider: resolveComponent('BlocksDivider'),
 	block_custom_hero_block: resolveComponent('BlocksCustomHeroBlock'),
+	block_custom_hero_2: resolveComponent('BlocksCustomHero2'),
 };
 
 const props = defineProps<{

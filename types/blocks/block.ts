@@ -14,6 +14,7 @@ import type { BlockTestimonial } from './block-testimonial';
 import type { BlockVideo } from './block-video';
 import type { BlockDivider } from './block-divider';
 import type { BlockCustomHeroBlock } from './block-custom-hero-block';
+import type { BlockCustomHero2 } from './block-custom-hero-2';
 
 export type BlockType =
 	| 'block_columns'
@@ -31,7 +32,8 @@ export type BlockType =
 	| 'block_testimonials'
 	| 'block_video'
 	| 'block_divider'
-	| 'block_custom_hero_block';
+	| 'block_custom_hero_block'
+	| 'block_custom_hero_2';
 
 export type Block =
 	| BlockColumn
@@ -49,4 +51,5 @@ export type Block =
 	| BlockTestimonial
 	| BlockVideo
 	| BlockDivider
-	| BlockCustomHeroBlock;
+	| BlockCustomHeroBlock
+	| BlockCustomHero2;
