@@ -14,7 +14,7 @@ withDefaults(
 </script>
 
 <template>
-	<BlockContainer>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex flex-col items-center justify-center px-6 lg:px-16">
 		<div
 			:class="[
 				{

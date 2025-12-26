@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-const isFloating = ref(false);
+const isFloating = ref(true); // Always floating header
 
 function onScroll() {
-	isFloating.value = window.scrollY > 40;
+	// Disabled - keeping header always floating
+	// isFloating.value = window.scrollY > 40;
 }
 
 onMounted(() => {
@@ -174,6 +175,7 @@ const {
 	background: rgba(255, 255, 255, 0.1);
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	transition: all 0.3s ease;
+	font-family: var(--font-futuruRegular);
 }
 
 .glass-button:hover {

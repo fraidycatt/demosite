@@ -78,7 +78,7 @@ const duration = computed(() => {
 </script>
 <template>
 	<section>
-		<BlockContainer>
+		<BlockContainer :fullWidth="true" class="min-h-screen flex items-center justify-center px-6 lg:px-16">
 			<div class="flex flex-col mx-auto lg:flex-row">
 				<!-- Text -->
 				<div class="flex flex-col pr-4 lg:w-3/5">

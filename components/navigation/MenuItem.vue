@@ -209,11 +209,12 @@ watch(
 </template>
 
 <style scoped lang="postcss">
-.glass-menu-link {
-	@apply relative text-white/80 hover:text-white transition-all duration-300 font-medium py-3 px-4 inline-flex items-center font-display outline-none rounded-lg;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-}
+	.glass-menu-link {
+		@apply relative text-white/80 hover:text-white transition-all duration-300 font-medium py-3 px-4 inline-flex items-center outline-none rounded-lg;
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		font-family: 'Futuru-Regular', sans-serif !important;
+	}
 
 .glass-menu-link:hover {
 	background: rgba(255, 255, 255, 0.1);
@@ -227,14 +228,15 @@ watch(
 }
 
 .glass-dropdown {
-	backdrop-filter: blur(25px);
-	-webkit-backdrop-filter: blur(25px);
-	background: rgba(0, 0, 0, 0.8);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(30px);
+	-webkit-backdrop-filter: blur(30px);
+	background: rgba(0, 0, 0, 0.7);
+	border: 1px solid rgba(255, 255, 255, 0.15);
 	border-radius: 16px;
 	box-shadow: 
-		0 25px 50px rgba(0, 0, 0, 0.4),
-		0 0 0 1px rgba(255, 255, 255, 0.05);
+		0 25px 50px rgba(0, 0, 0, 0.5),
+		0 0 0 1px rgba(255, 255, 255, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .image-card {
@@ -304,11 +306,13 @@ watch(
 .image-card-title {
 	@apply text-white font-bold text-lg leading-tight mb-2;
 	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+	font-family: 'Futuru-Regular', sans-serif;
 }
 
 .image-card-description {
 	@apply text-white/80 text-sm leading-snug;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+	font-family: 'Futuru-Regular', sans-serif;
 }
 
 .image-card-arrow {
@@ -339,5 +343,12 @@ watch(
 		grid-column: 1 / -1;
 		height: 120px;
 	}
+}
+</style>
+
+<style lang="postcss">
+/* Unscoped - targets PopoverButton buttons specifically */
+button.glass-menu-link {
+	font-family: 'Futuru-Regular', sans-serif !important;
 }
 </style>

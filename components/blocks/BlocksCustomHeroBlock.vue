@@ -161,7 +161,7 @@ watch(
   <div class="relative w-screen h-screen overflow-hidden">
     <div ref="threeRef" class="absolute inset-0 w-full h-full z-0 transition-colors duration-300 pointer-events-none" style="top:0;left:0;right:0;bottom:0;" />
     <div v-if="data" class="relative z-10 flex flex-col items-center justify-center text-center px-6 w-full h-full min-h-screen pt-24" style="min-height:100vh;justify-content:center;">
-      <h1 v-if="data.title" class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+      <h1 v-if="data.title" class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight font-customRegular">
         {{ data.title }}
       </h1>
       <h2 v-if="data.subtitle" class="text-xl md:text-2xl font-medium mb-6 opacity-80">

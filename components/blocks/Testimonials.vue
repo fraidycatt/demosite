@@ -74,7 +74,7 @@ function handleNavButton(direction: 'left' | 'right') {
 }
 </script>
 <template>
-	<BlockContainer class="relative overflow-hidden" full-width>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex flex-col items-center justify-center px-6 lg:px-16 relative overflow-hidden">
 		<div
 			class="absolute inset-0 bg-gradient-to-br from-white via-gray-300 to-primary dark:from-gray-700 dark:via-gray-900 dark:to-primary"
 		/>

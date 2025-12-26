@@ -20,7 +20,7 @@ const url = computed(() => {
 });
 </script>
 <template>
-	<BlockContainer>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex items-center justify-center px-6 lg:px-16">
 		<TypographyTitle v-if="data.title">{{ data.title }}</TypographyTitle>
 		<TypographyHeadline v-if="data.headline" :content="data.headline" size="lg" />
 		<VVideo

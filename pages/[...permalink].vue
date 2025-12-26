@@ -50,6 +50,7 @@ const { data: page } = await useAsyncData(
 										'title',
 										'subtitle',
 										'content',
+										'rotating_words',
 									],
 									block_hero: [
 										'id',

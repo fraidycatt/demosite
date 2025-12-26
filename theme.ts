@@ -10,11 +10,19 @@ export interface Theme {
 		sans: string;
 		code: string;
 		signature: string;
+		customOblique: string;
+		customRegular: string;
+		editorialBold: string;
+		editorialRegular: string;
+		editorialItalic: string;
+		editorialThin: string;
+		editorialThinItalic: string;
+		futuruRegular: string;
 	};
 }
 
 export const theme = {
-	primary: 'blue',
+	primary: 'violet',
 	gray: 'slate',
 	borderRadius: 'lg',
 	googleFonts: {
@@ -28,6 +36,14 @@ export const theme = {
 		sans: 'Inter',
 		code: 'Fira Code',
 		signature: 'Nothing You Could Do',
+		customOblique: 'Bringbold-Oblique',
+		customRegular: 'Bringbold-Regular',
+		editorialBold: 'EditorialToday-Bold',
+		editorialRegular: 'EditorialToday-Regular',
+		editorialItalic: 'EditorialToday-Italic',
+		editorialThin: 'EditorialToday-Thin',
+		editorialThinItalic: 'EditorialToday-ThinItalic',
+		futuruRegular: 'Futuru-Regular',
 	},
 } as Theme;
 

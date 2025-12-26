@@ -6,7 +6,7 @@ defineProps<{
 }>();
 </script>
 <template>
-	<BlockContainer>
+	<BlockContainer class="min-h-screen flex flex-col items-center justify-center">
 		<div
 			v-motion
 			:initial="{

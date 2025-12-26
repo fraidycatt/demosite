@@ -6,7 +6,7 @@ defineProps<{
 }>();
 </script>
 <template>
-	<BlockContainer>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex items-center justify-center px-6 lg:px-16">
 		<div class="max-w-3xl p-8 mx-auto mt-4 bg-gray-100 dark:bg-gray-800 rounded-panel">
 			<TypographyTitle v-if="data?.title">{{ data?.title }}</TypographyTitle>
 			<TypographyHeadline v-if="data?.headline" :content="data?.headline" />

@@ -24,3 +24,67 @@ html {
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
 }
+
+@font-face {
+  font-family: 'Bringbold-Oblique';
+  src: url('/fonts/Bringbold%20Nineties%20Oblique.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bringbold-Regular';
+  src: url('/fonts/Bringbold%20Nineties%20Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialToday-Bold';
+  src: url('/fonts/EditorialToday-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialToday-Italic';
+  src: url('/fonts/EditorialToday-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialToday-Regular';
+  src: url('/fonts/EditorialToday-Regular.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialToday-Thin';
+  src: url('/fonts/EditorialToday-Thin.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialToday-ThinItalic';
+  src: url('/fonts/EditorialToday-ThinItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futuru-Regular';
+  src: url('/fonts/Futuru-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

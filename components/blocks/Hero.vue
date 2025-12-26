@@ -6,7 +6,8 @@ defineProps<{
 }>();
 </script>
 <template>
-	<BlockContainer class="relative grid gap-12 md:grid-cols-3">
+	<BlockContainer :fullWidth="true" class="min-h-screen flex items-center justify-center px-6 lg:px-16">
+		<div class="relative grid gap-12 md:grid-cols-3 w-full">
 		<!-- Content -->
 		<div class="md:pt-12 md:col-span-2">
 			<TypographyTitle v-if="data.title">
@@ -29,5 +30,5 @@ defineProps<{
 				alt=""
 			/>
 		</div>
-	</BlockContainer>
+		</div>	</BlockContainer>
 </template>

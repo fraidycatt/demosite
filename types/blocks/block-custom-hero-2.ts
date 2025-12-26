@@ -3,4 +3,5 @@ export interface BlockCustomHero2 {
 	title?: string;
 	subtitle?: string;
 	content?: string;
+	rotating_words?: string;
 }

@@ -1,8 +1,24 @@
 <script setup lang="ts">
 import { borderRadiusMap } from '~/theme';
 
-const { globals, theme } = useAppConfig();
+const appConfig = useAppConfig();
+const { globals, theme, ui } = appConfig;
 const { fileUrl } = useFiles();
+
+// Merge Directus theme with local theme
+if (globals?.theme) {
+	if (globals.theme.primary) {
+		theme.primary = globals.theme.primary;
+		ui.primary = globals.theme.primary;
+	}
+	if (globals.theme.gray) {
+		theme.gray = globals.theme.gray;
+		ui.gray = globals.theme.gray;
+	}
+	if (globals.theme.borderRadius) {
+		theme.borderRadius = globals.theme.borderRadius;
+	}
+}
 
 // JSON-LD
 useSchemaOrg([

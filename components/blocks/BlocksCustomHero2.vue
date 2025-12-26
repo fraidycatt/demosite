@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue';
 import * as THREE from 'three';
 
 interface CustomHero2Data {
   title?: string;
   subtitle?: string;
   content?: string;
+  rotating_words?: string;
 }
 
-defineProps<{ data: CustomHero2Data }>();
+const props = defineProps<{ data: CustomHero2Data }>();
+
+const { globals } = useAppConfig();
 
 const threeRef = ref<HTMLElement | null>(null);
 let renderer: THREE.WebGLRenderer | null = null;
@@ -17,14 +20,28 @@ let camera: THREE.PerspectiveCamera | null = null;
 let particles: THREE.Points | null = null;
 let animationId: number;
 
-const particleCount = 150;
+const particleCount = 300;
 const velocities: THREE.Vector3[] = [];
+
+// Rotating text functionality
+const currentWordIndex = ref(0);
+const rotatingWords = computed(() => {
+  if (!props.data?.rotating_words) return [];
+  return props.data.rotating_words.split(',').map(w => w.trim()).filter(w => w);
+});
+
+const currentWord = computed(() => {
+  if (rotatingWords.value.length === 0) return '';
+  return rotatingWords.value[currentWordIndex.value];
+});
+
+let rotationInterval: ReturnType<typeof setInterval> | null = null;
 
 function getThemeColors() {
   const isDark = document.documentElement.classList.contains('dark');
   return {
     bg: isDark ? 0x000000 : 0xffffff,
-    dots: isDark ? 0xcccccc : 0x444444,
+    dots: isDark ? 0xffffff : 0x000000,
   };
 }
 
@@ -34,6 +51,7 @@ function setupThree() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const colors = getThemeColors();
+  console.log('Theme colors:', colors);
 
   // Scene
   scene = new THREE.Scene();
@@ -53,6 +71,39 @@ function setupThree() {
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(particleCount * 3);
   const alphas = new Float32Array(particleCount);
+  const particleColors = new Float32Array(particleCount * 3); // RGB for each particle
+
+  // Get primary color from Directus globals theme
+  const tailwindColorMap: Record<string, string> = {
+    'blue': '#3b82f6',
+    'violet': '#8b5cf6',
+    'purple': '#a855f7',
+    'fuchsia': '#d946ef',
+    'pink': '#ec4899',
+    'rose': '#f43f5e',
+    'red': '#ef4444',
+    'orange': '#f97316',
+    'amber': '#f59e0b',
+    'yellow': '#eab308',
+    'lime': '#84cc16',
+    'green': '#22c55e',
+    'emerald': '#10b981',
+    'teal': '#14b8a6',
+    'cyan': '#06b6d4',
+    'sky': '#0ea5e9',
+    'indigo': '#6366f1',
+  };
+  
+  const primaryColorName = globals?.theme?.primary || 'blue';
+  console.log('Directus globals.theme:', globals?.theme);
+  console.log('Primary color name:', primaryColorName);
+  const primaryColorHex = tailwindColorMap[primaryColorName] || tailwindColorMap['blue'];
+  console.log('Primary color hex:', primaryColorHex);
+  const primaryColor = new THREE.Color(primaryColorHex);
+  const regularColor = new THREE.Color(colors.dots);
+  
+  console.log('Primary THREE.Color:', primaryColor);
+  console.log('Regular THREE.Color:', regularColor);
 
   // Create particles with random positions and velocities
   velocities.length = 0;
@@ -63,6 +114,13 @@ function setupThree() {
     positions[i * 3 + 2] = (Math.random() - 0.5) * 50; // z
 
     alphas[i] = 1.0;
+
+    // 10% chance to be primary color, 90% regular color
+    const isPrimary = Math.random() < 0.4;
+    const particleColor = isPrimary ? primaryColor : regularColor;
+    particleColors[i * 3] = particleColor.r;
+    particleColors[i * 3 + 1] = particleColor.g;
+    particleColors[i * 3 + 2] = particleColor.b;
 
     // Random velocity (each dot moves in its own direction)
     const angle = Math.random() * Math.PI * 2;
@@ -76,27 +134,30 @@ function setupThree() {
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('alpha', new THREE.BufferAttribute(alphas, 1));
+  geometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
 
   // Particle material with custom shader for fade effect
   const material = new THREE.ShaderMaterial({
     uniforms: {
-      color: { value: new THREE.Color(colors.dots) },
-      pointSize: { value: 2.0 },
+      pointSize: { value: 3 },
     },
     vertexShader: `
       attribute float alpha;
+      attribute vec3 color;
       varying float vAlpha;
+      varying vec3 vColor;
       uniform float pointSize;
       
       void main() {
         vAlpha = alpha;
+        vColor = color;
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         gl_PointSize = pointSize;
         gl_Position = projectionMatrix * mvPosition;
       }
     `,
     fragmentShader: `
-      uniform vec3 color;
+      varying vec3 vColor;
       varying float vAlpha;
       
       void main() {
@@ -106,12 +167,12 @@ function setupThree() {
         if (dist > 0.5) discard;
         
         float alpha = (1.0 - dist * 2.0) * vAlpha;
-        gl_FragColor = vec4(color, alpha);
+        gl_FragColor = vec4(vColor, alpha);
       }
     `,
     transparent: true,
     depthWrite: false,
-    blending: THREE.AdditiveBlending,
+    blending: THREE.NormalBlending,
   });
 
   particles = new THREE.Points(geometry, material);
@@ -154,13 +215,13 @@ function animate() {
     
     let alpha = 1.0;
     
-    // Fade at top 10%
-    if (normalizedY > 0.9) {
-      alpha = (1.0 - normalizedY) / 0.1;
+    // Fade at top 25% (more gradual fade before header)
+    if (normalizedY > 0.75) {
+      alpha = (1.0 - normalizedY) / 0.25;
     }
-    // Fade at bottom 50%
-    else if (normalizedY < 0.5) {
-      alpha = normalizedY / 0.5;
+    // Fade at bottom 60%
+    else if (normalizedY < 0.6) {
+      alpha = normalizedY / 0.6;
     }
     
     alphas[i] = Math.max(0, Math.min(1, alpha));
@@ -177,7 +238,8 @@ function updateTheme() {
   if (!scene || !particles) return;
   const colors = getThemeColors();
   scene.background = new THREE.Color(colors.bg);
-  (particles.material as THREE.ShaderMaterial).uniforms.color.value = new THREE.Color(colors.dots);
+  // Note: Particle colors are set per-particle in geometry, not via uniforms
+  // Would need to regenerate particles to change their colors
 }
 
 function handleResize() {
@@ -207,6 +269,13 @@ onMounted(() => {
   setupThree();
   window.addEventListener('resize', handleResize);
   
+  // Start word rotation if we have rotating words
+  if (rotatingWords.value.length > 0) {
+    rotationInterval = setInterval(() => {
+      currentWordIndex.value = (currentWordIndex.value + 1) % rotatingWords.value.length;
+    }, 2000); // Change word every 2 seconds
+  }
+  
   // Watch for theme changes
   const observer = new MutationObserver(() => updateTheme());
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
@@ -218,6 +287,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
+  if (rotationInterval) clearInterval(rotationInterval);
   cleanup();
 });
 </script>
@@ -225,14 +295,19 @@ onBeforeUnmount(() => {
 <template>
   <div class="relative w-screen h-screen overflow-hidden">
     <div ref="threeRef" class="absolute inset-0 w-full h-full z-0 pointer-events-none" />
-    <div v-if="data" class="relative z-10 flex flex-col items-center justify-center text-center px-6 w-full h-full min-h-screen pt-24">
-      <h1 v-if="data.title" class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+    <div v-if="data" class="relative z-10 flex flex-col items-center justify-start text-center px-6 w-full h-full min-h-screen pt-[30vh]">
+      <h1 v-if="data.title" class="text-4xl md:text-6xl font-extrabold mb-4 font-futuruRegular text-gray-600 dark:text-white">
         {{ data.title }}
+        <span v-if="rotatingWords.length > 0" class="rotating-word-container inline-block text-primary-500">
+          <transition name="word-fade" mode="out-in">
+            <span :key="currentWord" class="rotating-word">{{ currentWord }}</span>
+          </transition>
+        </span>
       </h1>
-      <h2 v-if="data.subtitle" class="text-xl md:text-2xl font-medium mb-6 opacity-80">
+      <h2 v-if="data.subtitle" class="text-xl md:text-2xl font-medium mb-6 opacity-80 font-customOblique text-gray-600 dark:text-gray-400">
         {{ data.subtitle }}
       </h2>
-      <div v-if="data.content" class="prose prose-lg max-w-2xl mx-auto opacity-90" v-html="data.content" />
+      <div v-if="data.content" class="prose prose-lg md:text-2xl max-w-2xl mx-auto opacity-90 font-futuruRegular text-gray-600 dark:text-gray-300" v-html="data.content" />
     </div>
     <div v-else class="relative z-10 flex items-center justify-center text-center text-gray-400 min-h-screen">
       No data for this block.
@@ -249,7 +324,36 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-h1, h2 {
-  color: var(--tw-prose-headings, inherit);
+/* Rotating word animation */
+.rotating-word-container {
+  position: relative;
+  min-width: 200px;
+  text-align: left;
 }
+
+.rotating-word {
+  display: inline-block;
+}
+
+.word-fade-enter-active,
+.word-fade-leave-active {
+  transition: all 0.4s ease;
+}
+
+.word-fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.word-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.word-fade-enter-to,
+.word-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Removed h1, h2 color override to let Tailwind classes work */
 </style>

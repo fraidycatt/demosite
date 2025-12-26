@@ -13,7 +13,7 @@ const galleryItems = computed(() => {
 </script>
 
 <template>
-	<BlockContainer>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex items-center justify-center px-6 lg:px-16">
 		<TypographyTitle v-if="data.title">{{ data.title }}</TypographyTitle>
 		<TypographyHeadline v-if="data.headline" :content="data.headline" size="lg" />
 		<VGallery v-if="galleryItems && galleryItems.length > 0" :items="galleryItems" />

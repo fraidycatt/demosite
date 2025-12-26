@@ -8,7 +8,7 @@ defineProps<{
 const { fileUrl } = useFiles();
 </script>
 <template>
-	<BlockContainer>
+	<BlockContainer :fullWidth="true" class="min-h-screen flex flex-col items-center justify-center px-6 lg:px-16">
 		<TypographyTitle v-if="data?.title">{{ data?.title }}</TypographyTitle>
 		<TypographyHeadline v-if="data?.headline" :content="data?.headline" size="lg" />
 		<div class="flow-root mt-8 lg:mt-10">
